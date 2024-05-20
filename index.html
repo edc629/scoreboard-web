@@ -1,0 +1,47 @@
+<html data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Scoreboard">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0,user-scalable=no" />
+  <title>Scoreboard</title>
+  <!-- <script src="nosleep.min.js"></script> -->
+  <!-- <script src="index.min.js"></script> -->
+  <script>
+    window.addEventListener("load", () => {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    });
+  </script>
+  <link href="index.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <table>
+    <tr class="r0">
+      <td width="50%">
+        <div id="scorea">00</div>
+        <div id="wina">00</div>
+      </td>
+      <td width="50%">
+        <div id="scoreb">00</div>
+        <div id="winb">00</div>
+      </td>
+    </tr>
+    <tr class="r1">
+      <td><button id="inca" class="incbtn">+</button></td>
+      <td><button id="incb" class="incbtn">+</button></td>
+    </tr>
+    <tr class="r2">
+      <td><button id="deca" class="decbtn">-</button></td>
+      <td><button id="decb" class="decbtn">-</button></td>
+    </tr>
+  </table>
+</body>
+
+</html>
