@@ -1,9 +1,9 @@
 const cacheName = "scoreboard-v1";
 const appShellFiles = [
-  "/",
-  "/index.html",
-  "/index.min.css",
-  "/favicon.png",
+  "/scoreboard-web",
+  "/scoreboard-web/index.html",
+  "/scoreboard-web/index.min.css",
+  "/scoreboard-web/favicon.png",
 ];
 
 self.addEventListener("install", (e) => {
