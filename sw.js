@@ -3,6 +3,8 @@ const appShellFiles = [
   "/scoreboard-web",
   "/scoreboard-web/index.html",
   "/scoreboard-web/index.min.css",
+  "/scoreboard-web/index.min.js",
+  "/scoreboard-web/nosleep.min.js",
   "/scoreboard-web/favicon.png",
 ];
 
@@ -11,8 +13,8 @@ self.addEventListener("install", (e) => {
   e.waitUntil(
     (async () => {
       const cache = await caches.open(cacheName);
-      console.log("[Service Worker] Caching all: app shell and content");
       await cache.addAll(appShellFiles);
+      console.log("[Service Worker] Caching all: app shell and content");
     })(),
   );
 });
@@ -27,8 +29,8 @@ self.addEventListener("fetch", (e) => {
       }
       const response = await fetch(e.request);
       const cache = await caches.open(cacheName);
-      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
       cache.put(e.request, response.clone());
+      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
       return response;
     })(),
   );
