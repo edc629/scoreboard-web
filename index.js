@@ -6,6 +6,7 @@ var prevField = null;
 var currentField = null;
 var currentGameIndex = 0;
 var currentGameHistory = [{ A: { d: 0, p: [2, 1] }, B: { d: 0, p: [2, 1] } }];
+var resetTimeoutHandle = null;
 
 function updateMenu() {
   var undo = document.getElementById("undo");
@@ -211,8 +212,20 @@ window.addEventListener("load", () => {
     });
   }
   var reset = document.getElementById("reset");
-  reset.addEventListener("click", (e) => {
-    resetAllGames();
+  var eventDown = "mousedown";
+  var eventUp = "mouseup";
+  if ('ontouchstart' in window) {
+    eventDown = "touchstart";
+    eventUp = "touchend";
+  }
+  reset.addEventListener(eventDown, (e) => {
+    resetTimeoutHandle = setTimeout(resetAllGames, 3000);
+  });
+  reset.addEventListener(eventUp, (e) => {
+    if (resetTimeoutHandle) {
+      clearTimeout(resetTimeoutHandle);
+      resetTimeoutHandle = null;
+    }
   });
   var undo = document.getElementById("undo");
   undo.addEventListener("click", (e) => {
