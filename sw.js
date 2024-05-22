@@ -6,6 +6,7 @@ const appShellFiles = [
   "/scoreboard-web/index.min.js",
   "/scoreboard-web/nosleep.min.js",
   "/scoreboard-web/favicon.png",
+  "/scoreboard-web/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2",
 ];
 
 self.addEventListener("install", (e) => {
