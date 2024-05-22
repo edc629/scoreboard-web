@@ -94,6 +94,7 @@ function checkScore(scores, game) {
     resetGame();
     updateScore(scores);
     updateField(scores.A.w < scores.B.w ? "field-a-r" : "field-b-r");
+    updatePlayer(currentGameHistory[currentGameIndex]);
   }
   else {
     if (scores.A.s == scores.B.s) {
@@ -116,8 +117,8 @@ function checkScore(scores, game) {
         updateField(scores.B.s % 2 == 0 ? "field-b-r" : "field-b-l");
       }
     }
+    updatePlayer(game);
   }
-  updatePlayer(game);
   localStorage.setItem("scores", JSON.stringify(scores));
 }
 
