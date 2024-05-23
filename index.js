@@ -189,8 +189,7 @@ function resetAllGames() {
   localStorage.removeItem("history");
 }
 
-
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
   // if ("serviceWorker" in navigator) {
   //   navigator.serviceWorker.register("/scoreboard-web/sw.min.js").then((r) => {
   //     if (r.installing) {
@@ -200,10 +199,6 @@ window.addEventListener("load", () => {
   //     }
   //   });
   // }
-  document.addEventListener('click', function enableNoSleep() {
-    document.removeEventListener('click', enableNoSleep, false);
-    noSleep.enable();
-  }, false);
   getScoreInfo();
   var scores = document.getElementsByClassName("score");
   for (var i = 0; i < scores.length; i++) {
@@ -235,4 +230,8 @@ window.addEventListener("load", () => {
   redo.addEventListener("click", (e) => {
     shiftGame(1);
   });
+  document.addEventListener('click', function enableNoSleep() {
+    document.removeEventListener('click', enableNoSleep, false);
+    noSleep.enable();
+  }, false);
 });
