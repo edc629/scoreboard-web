@@ -191,7 +191,6 @@ function resetAllGames() {
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState == "complete") {
-    document.getElementById("debug").innerText = ("wakeLock" in navigator);
     document.addEventListener('click', function enableNoSleep() {
       document.removeEventListener('click', enableNoSleep, false);
       noSleep.enable();
@@ -200,15 +199,15 @@ document.addEventListener("readystatechange", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  // if ("serviceWorker" in navigator) {
-  //   navigator.serviceWorker.register("/scoreboard-web/sw.min.js").then((r) => {
-  //     if (r.installing) {
-  //       setTimeout(() => {
-  //         window.location.reload();
-  //       }, 1000);
-  //     }
-  //   });
-  // }
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/scoreboard-web/sw.min.js").then((r) => {
+      if (r.installing) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    });
+  }
   getScoreInfo();
   var scores = document.getElementsByClassName("score");
   for (var i = 0; i < scores.length; i++) {
