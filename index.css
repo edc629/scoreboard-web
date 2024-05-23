@@ -108,7 +108,7 @@ body {
     width: 50%;
     height: 90%;
     display: inline-block;
-    align-content: start;
+    align-content: center;
     text-align: center;
     background-color: black;
   }
