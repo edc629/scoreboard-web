@@ -191,7 +191,6 @@ function resetAllGames() {
 
 document.addEventListener("readystatechange", () => {
   if (document.readyState == "complete") {
-    alert("wakeLock" in navigator);
     document.addEventListener('click', function enableNoSleep() {
       document.removeEventListener('click', enableNoSleep, false);
       noSleep.enable();
