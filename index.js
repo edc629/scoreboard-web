@@ -189,6 +189,15 @@ function resetAllGames() {
   localStorage.removeItem("history");
 }
 
+document.addEventListener("readystatechange", () => {
+  if (document.readyState == "complete") {
+    document.addEventListener('click', function enableNoSleep() {
+      document.removeEventListener('click', enableNoSleep, false);
+      noSleep.enable();
+    }, false);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/scoreboard-web/sw.min.js").then((r) => {
@@ -234,8 +243,4 @@ document.addEventListener("DOMContentLoaded", () => {
   redo.addEventListener("click", (e) => {
     shiftGame(1);
   });
-  document.addEventListener('click', function enableNoSleep() {
-    document.removeEventListener('click', enableNoSleep, false);
-    noSleep.enable();
-  }, false);
 });
