@@ -1,4 +1,4 @@
-var noSleep = new NoSleep();
+var noSleep = new NoSleep(true);
 const defaultMaxScore = 21;
 var currentScores = { A: { s: 0, w: 0 }, B: { s: 0, w: 0 } };
 var currentMaxScore = defaultMaxScore;
