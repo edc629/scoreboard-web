@@ -222,6 +222,10 @@ document.addEventListener("DOMContentLoaded", () => {
       resetTimeoutHandle = null;
     }
   });
+  var reload = document.getElementById("reload");
+  reload.addEventListener("click", (e) => {
+    window.location.reload();
+  });
   var undo = document.getElementById("undo");
   undo.addEventListener("click", (e) => {
     shiftGame(-1);

@@ -40,7 +40,7 @@
 }
 
 body {
-  margin: 0px 0px 0px 0px;
+  margin: 1vh 0px 0px 0px;
   background-color: black;
 }
 
@@ -57,7 +57,7 @@ body {
   border: 3px solid white;
   border-radius: 20px;
   display: inline-block;
-  width: 80%;
+  width: 90%;
 }
 
 #score-a {
@@ -70,7 +70,7 @@ body {
 
 .win-wrap {
   /* background-color: green; */
-  padding-top: 20px;
+  padding-top: 2vh;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -78,53 +78,37 @@ body {
   font-size: 0.2em;
 }
 
-.field {
-  border: 1px solid white;
-  padding: 0px 20px 0px 20px;
+#win-a,
+#win-b {
+  color: #FFEB3B;
 }
 
-.field.active {
-  background-color: darkgreen;
-
-}
-
-.de-score-wrap {
-  background-color: white;
-  position: relative;
-  width: 1px;
-  height: 1px;
+#reload {
   display: none;
 }
 
-.de-score {
-  display: block;
-  background-color: #555555;
-  position: absolute;
-  padding: 4px 4px 4px 4px;
-  border: 4px solid white;
-  border-radius: 30px;
-  line-height: 0.2em;
-  font-size: 0.3em;
-  width: 0.4em;
-  height: 0.4em;
+.field.active {
+  background-color: #00d000;
+  color: black;
+  font-weight: bold;
 }
 
 .menu-common {
   background-color: #222;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
 }
 
 @media only screen and (orientation: landscape) {
   .team {
-    font-size: 46vh;
+    font-size: 50vh;
     width: 50%;
     height: 90%;
     display: inline-block;
-    align-content: center;
+    align-content: start;
     text-align: center;
     background-color: black;
   }
@@ -135,14 +119,10 @@ body {
     font-size: 8vh;
   }
 
-  #de-score-a {
-    top: 0em;
-    right: 0.1em;
-  }
-
-  #de-score-b {
-    top: 0em;
-    right: 0.1em;
+  .field {
+    border: 1px solid white;
+    padding: 0px 4vw 0px 4vw;
+    font-size: 2em;
   }
 }
 
@@ -152,7 +132,7 @@ body {
     width: 100%;
     height: 46%;
     display: block;
-    align-content: center;
+    align-content: start;
     text-align: center;
     background-color: black;
   }
@@ -163,13 +143,9 @@ body {
     font-size: 6vh;
   }
 
-  #de-score-a {
-    top: 0em;
-    right: 0.1em;
-  }
-
-  #de-score-b {
-    top: 0em;
-    right: 0.1em;
+  .field {
+    border: 1px solid white;
+    padding: 0px 3.5vw 0px 3.5vw;
+    font-size: 1.4em;
   }
 }
