@@ -102,6 +102,10 @@ body {
   width: 100%;
 }
 
+#debug {
+  font-size: 0.1em !important;
+}
+
 @media only screen and (orientation: landscape) {
   .team {
     font-size: 50vh;
