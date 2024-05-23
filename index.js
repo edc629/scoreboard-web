@@ -200,13 +200,12 @@ document.addEventListener("readystatechange", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/scoreboard-web/sw.min.js").then((r) => {
-      if (r.installing) {
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+    navigator.serviceWorker.addEventListener("message", (e) => {
+      if (e.data == "installed") {
+        window.location.reload();
       }
     });
+    navigator.serviceWorker.register("/scoreboard-web/sw.min.js");
   }
   getScoreInfo();
   var scores = document.getElementsByClassName("score");
@@ -233,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   var reload = document.getElementById("reload");
   reload.addEventListener("click", (e) => {
-    window.location.reload();
+    navigator.serviceWorker.controller.postMessage("delete-cache");
   });
   var undo = document.getElementById("undo");
   undo.addEventListener("click", (e) => {

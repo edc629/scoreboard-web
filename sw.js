@@ -10,12 +10,19 @@ const appShellFiles = [
 ];
 
 self.addEventListener("install", (e) => {
-  console.log("[Service Worker] Install");
   e.waitUntil(
     (async () => {
       const cache = await caches.open(cacheName);
-      await cache.addAll(appShellFiles);
-      console.log("[Service Worker] Caching all: app shell and content");
+      await cache.addAll(appShellFiles).then(() => {
+        console.log("[Service Worker] Installed");
+        e.currentTarget.clients.matchAll({
+          includeUncontrolled: true,
+        }).then((clients) => {
+          clients.forEach(client => {
+            client.postMessage("installed");
+          });
+        });
+      });
     })(),
   );
 });
@@ -38,6 +45,7 @@ self.addEventListener("fetch", (e) => {
 });
 
 self.addEventListener("activate", (e) => {
+  caches.delete()
   e.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(
@@ -50,4 +58,10 @@ self.addEventListener("activate", (e) => {
       );
     }),
   );
+});
+
+self.addEventListener("message", (e) => {
+  if (e.data == "delete-cache") {
+    e.waitUntil(caches.delete(cacheName));
+  }
 });
