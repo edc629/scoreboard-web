@@ -7,6 +7,7 @@ var currentField = null;
 var currentGameIndex = 0;
 var currentGameHistory = [{ A: { d: 0, p: [2, 1] }, B: { d: 0, p: [2, 1] } }];
 var resetTimeoutHandle = null;
+var currentVolume = "off";
 
 function updateMenu() {
   var undo = document.getElementById("undo");
@@ -112,6 +113,8 @@ function shiftGame(v) {
 
 function checkScore(scores, game) {
   if (scores.A.s == currentMaxScore || scores.B.s == currentMaxScore) {
+    var whistle = document.getElementById("whistle-blow");
+    if (whistle && currentVolume == "up") { whistle.play(); }
     resetGame();
     updateScore(scores);
     updateField(scores.A.w < scores.B.w ? "player a r" : "player b r");
@@ -147,6 +150,11 @@ function getScoreInfo() {
   var scores = localStorage.getItem("scores");
   if (scores) {
     currentScores = JSON.parse(scores);
+  }
+  var volume = localStorage.getItem("volume");
+  if (volume) {
+    currentVolume = volume;
+    document.getElementById("volume").innerText = "volume_" + currentVolume;
   }
   var history = localStorage.getItem("history");
   if (history) {
@@ -216,7 +224,8 @@ document.addEventListener("readystatechange", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.search.indexOf("nocache=1") == -1 && "serviceWorker" in navigator) {
+  var enableServiceWorker = window.location.search.indexOf("nocache=1") == -1 && "serviceWorker" in navigator;
+  if (enableServiceWorker) {
     navigator.serviceWorker.addEventListener("message", (e) => {
       if (e.data == "installed") {
         window.location.reload();
@@ -249,7 +258,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   var reload = document.getElementById("reload");
   reload.addEventListener("click", (e) => {
-    navigator.serviceWorker.controller.postMessage("delete-cache");
+    if (enableServiceWorker) {
+      navigator.serviceWorker.controller.postMessage("delete-cache");
+    }
   });
   var undo = document.getElementById("undo");
   undo.addEventListener("click", (e) => {
@@ -258,5 +269,11 @@ document.addEventListener("DOMContentLoaded", () => {
   var redo = document.getElementById("redo");
   redo.addEventListener("click", (e) => {
     shiftGame(1);
+  });
+  var volume = document.getElementById("volume");
+  volume.addEventListener("click", (e) => {
+    currentVolume = currentVolume == "up" ? "off" : "up";
+    volume.innerText = "volume_" + currentVolume;
+    localStorage.setItem("volume", currentVolume);
   });
 });
