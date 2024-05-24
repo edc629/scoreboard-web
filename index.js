@@ -216,7 +216,7 @@ document.addEventListener("readystatechange", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  if ("serviceWorker" in navigator) {
+  if (window.location.search.indexOf("nocache=1") == -1 && "serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", (e) => {
       if (e.data == "installed") {
         window.location.reload();
