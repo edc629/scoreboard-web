@@ -254,11 +254,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getScoreInfo();
   document.addEventListener("keydown", (e) => {
+    console.log(e.key);
     switch (e.key) {
-      case "ArrowLeft":
+      case ",":
         shiftGame(-1);
         break;
-      case "ArrowRight":
+      case ".":
         shiftGame(1);
         break;
       case "Delete":
@@ -268,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       case "v":
         toggleVolume();
         break;
-      case "R":
+      case "B":
       case "b":
         increaseScore("a");
         break;
