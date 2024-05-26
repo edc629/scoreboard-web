@@ -254,7 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getScoreInfo();
   document.addEventListener("keydown", (e) => {
-    console.log(e.key);
     switch (e.key) {
       case ",":
         shiftGame(-1);
