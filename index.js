@@ -186,14 +186,14 @@ function increaseScore(target) {
   }
   var currentGame = structuredClone(currentGameHistory[currentGameIndex]);
   var isTeamA = (currentGame.A.d > 0);
-  if (target.classList.contains("a")) {
+  if ((typeof (target) == "object" && target.classList.contains("a")) || target == "a") {
     currentScores.A.s += 1;
     if (currentScores.A.s == currentMaxScore)
       currentScores.A.w += 1;
     currentGame.A.d = 1;
     currentGame.B.d = 0;
     if (isTeamA) { currentGame.A.p.reverse(); }
-  } else if (target.classList.contains("b")) {
+  } else if ((typeof (target) == "object" && target.classList.contains("b")) || target == "b") {
     currentScores.B.s += 1;
     if (currentScores.B.s == currentMaxScore)
       currentScores.B.w += 1;
@@ -212,6 +212,25 @@ function resetAllGames() {
   updateScore(currentScores);
   checkScore(currentScores, currentGameHistory[currentGameIndex]);
   localStorage.removeItem("history");
+}
+
+function toggleVolume(target) {
+  if (target == null) target = document.getElementById("volume");
+  currentVolume = currentVolume == "up" ? "off" : "up";
+  target.innerText = "volume_" + currentVolume;
+  localStorage.setItem("volume", currentVolume);
+}
+
+function waitForResetAllGames() {
+  if (resetTimeoutHandle != null) return;
+  resetTimeoutHandle = setTimeout(resetAllGames, 3000);
+}
+
+function cancelResetAllGames() {
+  if (resetTimeoutHandle) {
+    clearTimeout(resetTimeoutHandle);
+    resetTimeoutHandle = null;
+  }
 }
 
 document.addEventListener("readystatechange", () => {
@@ -234,6 +253,36 @@ document.addEventListener("DOMContentLoaded", () => {
     navigator.serviceWorker.register("/scoreboard-web/sw.min.js");
   }
   getScoreInfo();
+  document.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "ArrowLeft":
+        shiftGame(-1);
+        break;
+      case "ArrowRight":
+        shiftGame(1);
+        break;
+      case "Delete":
+        waitForResetAllGames();
+        break;
+      case "V":
+      case "v":
+        toggleVolume();
+        break;
+      case "R":
+      case "b":
+        increaseScore("a");
+        break;
+      case "R":
+      case "r":
+        increaseScore("b");
+        break;
+    }
+  });
+  document.addEventListener("keyup", (e) => {
+    if (e.key == "Delete") {
+      cancelResetAllGames();
+    }
+  });
   var scores = document.getElementsByClassName("score");
   for (var i = 0; i < scores.length; i++) {
     scores[i].addEventListener("click", (e) => {
@@ -247,15 +296,8 @@ document.addEventListener("DOMContentLoaded", () => {
     eventDown = "touchstart";
     eventUp = "touchend";
   }
-  reset.addEventListener(eventDown, (e) => {
-    resetTimeoutHandle = setTimeout(resetAllGames, 3000);
-  });
-  reset.addEventListener(eventUp, (e) => {
-    if (resetTimeoutHandle) {
-      clearTimeout(resetTimeoutHandle);
-      resetTimeoutHandle = null;
-    }
-  });
+  reset.addEventListener(eventDown, waitForResetAllGames);
+  reset.addEventListener(eventUp, cancelResetAllGames);
   var reload = document.getElementById("reload");
   reload.addEventListener("click", (e) => {
     if (enableServiceWorker) {
@@ -272,8 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   var volume = document.getElementById("volume");
   volume.addEventListener("click", (e) => {
-    currentVolume = currentVolume == "up" ? "off" : "up";
-    volume.innerText = "volume_" + currentVolume;
-    localStorage.setItem("volume", currentVolume);
+    toggleVolume(e.target);
   });
 });
