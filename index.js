@@ -1,11 +1,13 @@
 var noSleep = new NoSleep(true);
 const defaultMaxScore = 21;
-var currentScores = { A: { s: 0, w: 0 }, B: { s: 0, w: 0 } };
+const initGameHistory = [{ A: { d: 0, p: [2, 1] }, B: { d: 0, p: [2, 1] } }];
+const initScores = { A: { s: 0, w: 0 }, B: { s: 0, w: 0 } };
+var currentScores = null;
 var currentMaxScore = defaultMaxScore;
 var prevField = null;
 var currentField = null;
 var currentGameIndex = 0;
-var currentGameHistory = [{ A: { d: 0, p: [2, 1] }, B: { d: 0, p: [2, 1] } }];
+var currentGameHistory = null;
 var resetTimeoutHandle = null;
 var currentVolume = "off";
 
@@ -24,7 +26,28 @@ function updateMenu() {
   }
 }
 
-function updateField(cls) {
+function getServingSide(scores, game) {
+  if (scores.A.s == scores.B.s && scores.A.s == 0) {
+    return (scores.A.w < scores.B.w) ? "a" : "b";
+  } else {
+    return game.A.d > 0 ? "a" : "b";
+  }
+}
+
+function updateField(scores, game) {
+  var servingSide = getServingSide(scores, game);
+  var field = null;
+  if (scores.A.s == scores.B.s && scores.A.s == 0) {
+    field = "r";
+  } else {
+    if (servingSide == "a") {
+      field = scores.A.s % 2 == 0 ? "r" : "l";
+    } else {
+      field = scores.B.s % 2 == 0 ? "r" : "l";
+    }
+  }
+
+  var cls = "player " + servingSide + " " + field;
   prevField = currentField;
   if (prevField) {
     for (var i = 0; i < prevField.length; i++) {
@@ -57,22 +80,22 @@ function updatePlayer(game) {
   }
 }
 
-function updateScore(data) {
+function updateScore(scores) {
   var scorea = document.getElementsByClassName("score a");
   for (var i = 0; i < scorea.length; i++) {
-    scorea[i].innerText = String(data.A.s).padStart(2, '0');
+    scorea[i].innerText = String(scores.A.s).padStart(2, '0');
   }
   var scoreb = document.getElementsByClassName("score b");
   for (var i = 0; i < scoreb.length; i++) {
-    scoreb[i].innerText = String(data.B.s).padStart(2, '0');
+    scoreb[i].innerText = String(scores.B.s).padStart(2, '0');
   }
   var wina = document.getElementsByClassName("win a");
   for (var i = 0; i < wina.length; i++) {
-    wina[i].innerText = String(data.A.w).padStart(2, '0');
+    wina[i].innerText = String(scores.A.w).padStart(2, '0');
   }
   var winb = document.getElementsByClassName("win b");
   for (var i = 0; i < winb.length; i++) {
-    winb[i].innerText = String(data.B.w).padStart(2, '0');
+    winb[i].innerText = String(scores.B.w).padStart(2, '0');
   }
 }
 
@@ -80,7 +103,7 @@ function resetGame() {
   currentScores.A.s = 0;
   currentScores.B.s = 0;
   currentGameIndex = 0;
-  currentGameHistory = [{ A: { d: 0, p: [2, 1] }, B: { d: 0, p: [2, 1] } }];
+  currentGameHistory = structuredClone(initGameHistory);
   currentMaxScore = defaultMaxScore;
 }
 
@@ -103,11 +126,12 @@ function shiftGame(v) {
     currentScores.B.s += currentGame.B.d;
   }
   updateScore(currentScores);
-  if (currentGame.A.d > 0) {
-    updateField(currentScores.A.s % 2 == 0 ? "player a r" : "player a l");
-  } else {
-    updateField(currentScores.B.s % 2 == 0 ? "player b r" : "player b l");
-  }
+  updateField(currentScores, currentGame);
+  // if (currentGame.A.s) {
+  //   updateField(currentScores.A.s % 2 == 0 ? "player a r" : "player a l");
+  // } else {
+  //   updateField(currentScores.B.s % 2 == 0 ? "player b r" : "player b l");
+  // }
   updatePlayer(currentGame);
 }
 
@@ -117,7 +141,8 @@ function checkScore(scores, game) {
     if (whistle && currentVolume == "up") { whistle.play(); }
     resetGame();
     updateScore(scores);
-    updateField(scores.A.w < scores.B.w ? "player a r" : "player b r");
+    updateField(scores, game);
+    // updateField(scores.A.w < scores.B.w ? "player a r" : "player b r");
     updatePlayer(currentGameHistory[currentGameIndex]);
   }
   else {
@@ -125,22 +150,23 @@ function checkScore(scores, game) {
       if (scores.A.s >= 20) {
         currentMaxScore = scores.A.s + 2;
       }
-      if (scores.A.s == 0) {
-        updateField(scores.A.w < scores.B.w ? "player a r" : "player b r");
-      } else {
-        if (game.A.d > 0) {
-          updateField(scores.A.s % 2 == 0 ? "player a r" : "player a l");
-        } else {
-          updateField(scores.B.s % 2 == 0 ? "player b r" : "player b l");
-        }
-      }
+      // if (scores.A.s == 0) {
+      //   updateField(scores.A.w < scores.B.w ? "player a r" : "player b r");
+      // } else {
+      //   if (game.A.d > 0) {
+      //     updateField(scores.A.s % 2 == 0 ? "player a r" : "player a l");
+      //   } else {
+      //     updateField(scores.B.s % 2 == 0 ? "player b r" : "player b l");
+      //   }
+      // }
     } else {
-      if (game.A.d > 0) {
-        updateField(scores.A.s % 2 == 0 ? "player a r" : "player a l");
-      } else {
-        updateField(scores.B.s % 2 == 0 ? "player b r" : "player b l");
-      }
+      // if (game.A.d > 0) {
+      //   updateField(scores.A.s % 2 == 0 ? "player a r" : "player a l");
+      // } else {
+      //   updateField(scores.B.s % 2 == 0 ? "player b r" : "player b l");
+      // }
     }
+    updateField(scores, game);
     updatePlayer(game);
   }
   localStorage.setItem("scores", JSON.stringify(scores));
@@ -150,6 +176,8 @@ function getScoreInfo() {
   var scores = localStorage.getItem("scores");
   if (scores) {
     currentScores = JSON.parse(scores);
+  } else {
+    currentScores = structuredClone(initScores);
   }
   var volume = localStorage.getItem("volume");
   if (volume) {
@@ -161,12 +189,14 @@ function getScoreInfo() {
     currentGameHistory = JSON.parse(history);
     currentGameIndex = currentGameHistory.length - 1;
     var currentGame = currentGameHistory[currentGameIndex];
-    var isTeamA = (currentGameHistory[currentGameIndex].A.d > 0);
-    if (isTeamA) {
-      updateField(currentScores.A.s % 2 == 0 ? "player a r" : "player a l", currentGame);
-    } else {
-      updateField(currentScores.B.s % 2 == 0 ? "player b r" : "player b l", currentGame);
-    }
+    // if (currentGame.A.s) {
+    //   updateField(currentScores.A.s % 2 == 0 ? "player a r" : "player a l");
+    // } else {
+    //   updateField(currentScores.B.s % 2 == 0 ? "player b r" : "player b l");
+    // }
+    updateField(currentScores, currentGame);
+  } else {
+    currentGameHistory = structuredClone(initGameHistory);
   }
   updateScore(currentScores);
   checkScore(currentScores, currentGameHistory[currentGameIndex]);
@@ -185,21 +215,21 @@ function increaseScore(target) {
     currentGameHistory = currentGameHistory.slice(0, currentGameIndex + 1);
   }
   var currentGame = structuredClone(currentGameHistory[currentGameIndex]);
-  var isTeamA = (currentGame.A.d > 0);
+  var servingSide = getServingSide(currentScores, currentGame);
   if ((typeof (target) == "object" && target.classList.contains("a")) || target == "a") {
+    if (servingSide == "a") { currentGame.A.p.reverse(); }
     currentScores.A.s += 1;
     if (currentScores.A.s == currentMaxScore)
       currentScores.A.w += 1;
     currentGame.A.d = 1;
     currentGame.B.d = 0;
-    if (isTeamA) { currentGame.A.p.reverse(); }
   } else if ((typeof (target) == "object" && target.classList.contains("b")) || target == "b") {
+    if (servingSide == "b") { currentGame.B.p.reverse(); }
     currentScores.B.s += 1;
     if (currentScores.B.s == currentMaxScore)
       currentScores.B.w += 1;
     currentGame.A.d = 0;
     currentGame.B.d = 1;
-    if (!isTeamA) { currentGame.B.p.reverse(); }
   }
   pushGameHistory(currentGame);
   updateScore(currentScores);
@@ -207,7 +237,7 @@ function increaseScore(target) {
 }
 
 function resetAllGames() {
-  currentScores = { A: { s: 0, w: 0 }, B: { s: 0, w: 0 } };
+  currentScores = structuredClone(initScores);
   resetGame();
   updateScore(currentScores);
   checkScore(currentScores, currentGameHistory[currentGameIndex]);
