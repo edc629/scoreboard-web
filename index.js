@@ -10,6 +10,7 @@ var currentGameIndex = 0;
 var currentGameHistory = null;
 var resetTimeoutHandle = null;
 var currentVolume = "off";
+var currentField3D = false;
 
 function updateMenu() {
   var undo = document.getElementById("undo");
@@ -184,6 +185,10 @@ function getScoreInfo() {
     currentVolume = volume;
     document.getElementById("volume").innerText = "volume_" + currentVolume;
   }
+  var field3D = localStorage.getItem("field-3d");
+  if (field3D) {
+    currentField3D = (field3D == "true");
+  }
   var history = localStorage.getItem("history");
   if (history) {
     currentGameHistory = JSON.parse(history);
@@ -317,6 +322,16 @@ document.addEventListener("DOMContentLoaded", () => {
   for (var i = 0; i < scores.length; i++) {
     scores[i].addEventListener("click", (e) => {
       increaseScore(e.target);
+    });
+  }
+  var fieldPanels = document.getElementsByClassName("field-panel");
+  for (var i = 0; i < fieldPanels.length; i++) {
+    if (currentField3D) {
+      fieldPanels[i].classList.toggle("transform");
+    }
+    fieldPanels[i].addEventListener("click", (e) => {
+      e.target.classList.toggle("transform");
+      localStorage.setItem("field-3d", e.target.classList.contains("transform"));
     });
   }
   var reset = document.getElementById("reset");
