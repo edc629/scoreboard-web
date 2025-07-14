@@ -290,10 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
   getScoreInfo();
   document.addEventListener("keydown", (e) => {
     switch (e.key) {
-      case ",":
+      case "P":
+      case "p":
         shiftGame(-1);
         break;
-      case ".":
+      case "N":
+      case "n":
         shiftGame(1);
         break;
       case "Delete":
