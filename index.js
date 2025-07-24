@@ -16,14 +16,18 @@ function updateMenu() {
   var undo = document.getElementById("undo");
   if (currentGameIndex > 0) {
     undo.classList.remove("inactive");
+    undo.classList.add("active");
   } else {
+    undo.classList.remove("active");
     undo.classList.add("inactive");
   }
   var redo = document.getElementById("redo");
   if (currentGameIndex == (currentGameHistory.length - 1)) {
+    redo.classList.remove("active");
     redo.classList.add("inactive");
   } else {
     redo.classList.remove("inactive");
+    redo.classList.add("active");
   }
 }
 
@@ -300,6 +304,10 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case "Delete":
         waitForResetAllGames();
+        break;
+      case "C":
+      case "c":
+        resetAllGames();
         break;
       case "V":
       case "v":

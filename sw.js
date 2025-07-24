@@ -1,4 +1,4 @@
-const cacheName = "scoreboard-v1.3";
+const cacheName = "scoreboard-v1.4";
 const appShellFiles = [
   "/scoreboard-web",
   "/scoreboard-web/index.html",

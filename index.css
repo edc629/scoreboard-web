@@ -22,6 +22,14 @@
   -webkit-font-smoothing: antialiased;
 }
 
+#undo.active {
+  color: yellow;
+}
+
+#redo.active {
+  color: #00d000;
+}
+
 .material-symbols-outlined.inactive {
   color: #555;
 }
