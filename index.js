@@ -142,8 +142,12 @@ function shiftGame(v) {
 
 function checkScore(scores, game) {
   if (scores.A.s == currentMaxScore || scores.B.s == currentMaxScore) {
-    var whistle = document.getElementById("whistle-blow");
-    if (whistle && currentVolume == "up") { whistle.play(); }
+    if (currentVolume == "up") {
+      const whistle = new Audio("whistle-blow-long.mp3");
+      whistle.addEventListener("loadeddata", () => {
+        whistle.play();
+      });
+    }
     resetGame();
     updateScore(scores);
     updateField(scores, game);
@@ -293,38 +297,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   getScoreInfo();
   document.addEventListener("keydown", (e) => {
-    switch (e.key) {
-      case "P":
-      case "p":
+    switch (e.code) {
+      case "KeyP":
         shiftGame(-1);
         break;
-      case "N":
-      case "n":
+      case "KeyN":
         shiftGame(1);
         break;
       case "Delete":
         waitForResetAllGames();
         break;
-      case "C":
-      case "c":
+      case "KeyC":
         resetAllGames();
         break;
-      case "V":
-      case "v":
+      case "KeyV":
         toggleVolume();
         break;
-      case "B":
-      case "b":
+      case "KeyB":
         increaseScore("a");
         break;
-      case "R":
-      case "r":
+      case "KeyR":
         increaseScore("b");
         break;
     }
   });
   document.addEventListener("keyup", (e) => {
-    if (e.key == "Delete") {
+    if (e.code == "Delete") {
       cancelResetAllGames();
     }
   });

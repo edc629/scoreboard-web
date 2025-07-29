@@ -1,4 +1,4 @@
-const cacheName = "scoreboard-v1.4";
+const cacheName = "scoreboard-v1.5";
 const appShellFiles = [
   "/scoreboard-web",
   "/scoreboard-web/index.html",
@@ -7,7 +7,7 @@ const appShellFiles = [
   "/scoreboard-web/nosleep.min.js",
   "/scoreboard-web/favicon.png",
   "/scoreboard-web/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2",
-  "/scoreboard-web/whistle-blow-long.wav",
+  "/scoreboard-web/whistle-blow-long.mp3",
 ];
 
 self.addEventListener("install", (e) => {
