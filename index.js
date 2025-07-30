@@ -276,12 +276,24 @@ function cancelResetAllGames() {
   }
 }
 
+function debug(msg) {
+  document.getElementById("debug-div").innerHTML = Date.now().toString() + " " + msg + "<BR/>" + document.getElementById("debug-div").innerHTML;
+}
+
+function enableNoSleep() {
+  document.removeEventListener('click', enableNoSleep, false);
+  document.removeEventListener('keydown', enableNoSleep, false);
+  noSleep.enable().then(() => {
+    if (noSleep.isEnabled) {
+      document.getElementById("nosleep-status").classList.add("active");
+    }
+  });
+}
+
 document.addEventListener("readystatechange", () => {
   if (document.readyState == "complete") {
-    document.addEventListener('click', function enableNoSleep() {
-      document.removeEventListener('click', enableNoSleep, false);
-      noSleep.enable();
-    }, false);
+    document.addEventListener('click', enableNoSleep, false);
+    document.addEventListener('keydown', enableNoSleep, false);
   }
 });
 

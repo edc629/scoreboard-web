@@ -106,12 +106,24 @@ body {
   left: 0px;
   background-color: black;
   color: white;
-  width: 200px;
   height: 100%;
   opacity: 0.5;
   overflow: hidden;
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   display: none;
+  pointer-events: none;
+}
+
+#nosleep-status {
+  border-width: 0px;
+  margin: 4px 0px 0px 0px;
+  height: 1px;
+  background-color: #222;
+}
+
+#nosleep-status.active {
+  background-color: #555;
 }
 
 @media only screen and (orientation: landscape) {
